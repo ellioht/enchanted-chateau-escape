@@ -1,4 +1,4 @@
-# enchanted-manor-escape
+# enchanted-chateau-escape
 OOP Text Based Adventire Game
 
-This is my text base adventire game using object oriented programming.
+This is my text base adventure game using object oriented programming.
