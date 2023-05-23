@@ -1,7 +1,8 @@
 // Class declarations
 class Room {
-    constructor(name) {
+    constructor(name,img) {
         this._name = name;
+        this._roomImage = img;
         this._description = "";
         this._linkedRooms = {};
         this._character = "";
@@ -9,6 +10,10 @@ class Room {
 
     get name() {
         return this._name;
+    }
+
+    get roomImage() {
+        return this._roomImage;
     }
 
     get description() {
@@ -152,18 +157,18 @@ class Item {
 }
 
 // Creating Rooms
-const DimlyLitRoom = new Room("Dimly Lit Room");
+const DimlyLitRoom = new Room("Dimly Lit Room", "dimroom.jpg");
 DimlyLitRoom.description =
     "A large storage room on the top floor with a single lightbulb struggling to light the entire room";
 
-const UpstairsHall = new Room("Upstairs Hall");
+const UpstairsHall = new Room("Upstairs Hall", "upstairshall.jpg");
 UpstairsHall.description = "A long thin hall with a window at the end";
 
-const MasterBedRoom = new Room("Master Bed Room");
+const MasterBedRoom = new Room("Master Bed Room", "masterbedroom.jpg");
 MasterBedRoom.description =
     "The largest bedroom in the building with a large bed covered in silk sheets and an old fireplace";
 
-const GrandStaircase = new Room("Grand Staircase");
+const GrandStaircase = new Room("Grand Staircase", "grandstaircase.jpg");
 GrandStaircase.description = "A grand staircase that leads to the main foyer of the bulding";
 
 // Linking Rooms
@@ -177,17 +182,25 @@ MasterBedRoom.linkRoom("west", UpstairsHall);
 
 GrandStaircase.linkRoom("east", UpstairsHall);
 
+
 function displayRoomInfo(room) {
+    // Set room Image
+    let image = document.getElementById("roomimg")
+    image.src = room.roomImage;
+
+    let label = document.getElementById("imglabel")
+    label.innerHTML = "<p>" + room.name + "</p>";
+
     let occupantMsg = "";
     if (room.character === "") {
         occupantMsg = "";
     } else {
-        occupantMsg = room.character.describe() + ". " + room.character.converse();
+        occupantMsg = "<p>" + room.character.describe() + ". " + room.character.converse() + "</p>";
     }
 
-    textContent = "<p>" + room.describe() + "</p>" + "<p>" + occupantMsg + "</p>" + "<p>" + room.getDetails() + "</p>";
+    textContent = "<p>" + room.describe() + "</p>" + occupantMsg + "<p>" + room.getDetails() + "</p>";
 
-    document.getElementById("textarea").innerHTML = textContent;
+    typewriterEffect(textContent);
     document.getElementById("usertext").focus();
 }
 

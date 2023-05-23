@@ -14,8 +14,10 @@
         <title>🏡Enchanted Chateau Escape🏡</title>
     </head>
     <body>
-        <div class="container">
+        <div class="container-fluid gamecontainer">
+            <div id="imglabel"><p>Dimly Lit Room</p></div>
             <img
+                id="roomimg"
                 class="chateau-img"
                 src="enchantedchateau.jpg"
                 alt="enchanted-chateau"
@@ -25,11 +27,12 @@
                     <div class="justify-content-center mx-auto text-center" id="alltext">
                         <div id="textarea" class="text-center"></div>
                         <br />
-                        <input type="text" id="usertext" />
+                        <input type="text" id="usertext" placeholder="north east south west" />
                     </div>
                 </div>
             </div>
         </div>
+        <script src="function.js"></script>
         <script src="index.js"></script>
     </body>
 </html>
