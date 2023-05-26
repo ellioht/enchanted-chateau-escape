@@ -15,7 +15,10 @@
     </head>
     <body>
         <div class="container-fluid gamecontainer">
-            <div id="imglabel"><p>Dimly Lit Room</p></div>
+            <img id="inv1" class="inv" src="" alt="" />
+            <div id="imglabel">
+                <p>Dimly Lit Room</p>
+            </div>
             <img
                 id="roomimg"
                 class="chateau-img"
@@ -27,7 +30,11 @@
                     <div class="justify-content-center mx-auto text-center" id="alltext">
                         <div id="textarea" class="text-center"></div>
                         <br />
-                        <input type="text" id="usertext" placeholder="north east south west" />
+                        <div class="input-elements">
+                            <div class="instructions"><p1>Type to move...</p1></div>
+                            <input type="text" id="usertext" placeholder="north east south west" />
+                            <button type="button" class="" id="playbutton">Play Again</button>
+                        </div>
                     </div>
                 </div>
             </div>
