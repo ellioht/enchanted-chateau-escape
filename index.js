@@ -76,6 +76,7 @@ class Room {
             return this;
         }
     }
+    
 }
 
 class Character {
@@ -182,8 +183,7 @@ const UpstairsHall = new Room("Upstairs Hall", "upstairshall.jpg");
 UpstairsHall.description = "a long narrow corridor. There must be a staircase around here...";
 
 const MasterBedRoom = new Room("Master Bed Room", "masterbedroom.jpg");
-MasterBedRoom.description =
-    "a large bed and dresser. You find an old rusty key. What could this be for?...";
+MasterBedRoom.description = "a large bed and dresser. You find an old rusty key. What could this be for?...";
 
 const GrandStaircase = new Room("Grand Staircase", "grandstaircase.jpg");
 GrandStaircase.description = "down to the main foyer. Time to find a way out of here.";
@@ -221,15 +221,12 @@ GrandStaircase.linkRoom("north", FrontEntrance);
 FrontEntrance.linkRoom("south", GrandStaircase);
 FrontEntrance.linkRoom("north", ExitRoom);
 
-
 const Ghost = new Character("Ghost");
 Ghost.description = "a scary Ghost";
 Ghost.description = "i am a ghost";
 LivingRoom.character = Ghost;
 
 let directions = ["north", "south", "east", "west"];
-
-
 
 function displayInventory(item) {
     let inventorySlot = document.getElementById("inv1");
@@ -241,7 +238,6 @@ function displayInventory(item) {
         inventorySlot.src = "";
     }
 }
-
 
 function displayRoomInfo(room) {
     document.getElementById("usertext").classList.add("hidden");
@@ -270,7 +266,8 @@ function displayRoomInfo(room) {
 
     // If at front entrance remove input if no key
     if (room.name === "Front Entrance" && currentItem.length < 1) {
-        directions = directions.filter(direction => direction !== "north");
+        console.log("remove north");
+        directions = directions.filter((direction) => direction !== "north");
     }
 
     // If escaped, else if died, else display normal room description
@@ -295,22 +292,26 @@ function displayRoomInfo(room) {
     // Use the updated directions array for command validation
     input(directions);
 
-    setTimeout(function(){ document.getElementById("usertext").classList.remove("hidden"); }, 5000);
+    setTimeout(function () {
+        document.getElementById("usertext").classList.remove("hidden");
+    }, 5000);
 }
 
-function input(directions) {
-    console.log(directions)
-    document.getElementById("usertext").addEventListener("keydown", function (event) {
+function input(directionsnew) {
+    function handleKeyDown(event) {
         if (event.key === "Enter") {
             command = document.getElementById("usertext").value;
-
-            if (directions.includes(command.toLowerCase())) {
+            if (directionsnew.includes(command.toLowerCase())) {
+                console.log("enter room");
                 currentRoom = currentRoom.move(command);
                 document.getElementById("usertext").value = "";
                 displayRoomInfo(currentRoom);
+                document.getElementById("usertext").removeEventListener("keydown", handleKeyDown);
             }
         }
-    });
+    }
+
+    document.getElementById("usertext").addEventListener("keydown", handleKeyDown);
 }
 
 function startGame() {
@@ -323,8 +324,9 @@ function startGame() {
     // document.getElementById("usertext").classList.remove("hidden");
     document.getElementById("playbutton").addEventListener("click", startGame);
 
-    input(directions);
-    setTimeout(function(){ document.getElementById("usertext").classList.remove("hidden"); }, 5000);
+    setTimeout(function () {
+        document.getElementById("usertext").classList.remove("hidden");
+    }, 5000);
 }
 
 startGame();
