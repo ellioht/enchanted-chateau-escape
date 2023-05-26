@@ -23,7 +23,7 @@ function typewriterEffect(text) {
             textElement.innerHTML += char;
 
             index++;
-            setTimeout(type, 5);
+            setTimeout(type, 20);
         }
     }
 }
