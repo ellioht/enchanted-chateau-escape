@@ -242,9 +242,59 @@ function displayInventory(item) {
     }
 }
 
-function displayRoomInfo(room) {
+// function displayRoomInfo(room) {
 
-    directions = ["north", "south", "east", "west"];
+//     directions = ["north", "south", "east", "west"];
+
+//     // Set room Image and title
+//     let image = document.getElementById("roomimg");
+//     image.src = room.roomImage;
+//     let label = document.getElementById("imglabel");
+//     label.innerHTML = "<p>" + room.name + "</p>";
+
+//     // If in master bedroom pickup key and set inventory
+//     if (room.name === "Master Bed Room") {
+//         currentItem.push(DoorKey);
+//     }
+//     displayInventory(currentItem);
+
+//     // If character in room display character message
+//     let occupantMsg = "";
+//     if (room.character === "") {
+//         occupantMsg = "";
+//     } else {
+//         occupantMsg = "<p>" + room.character.describe() + ". " + room.character.converse() + "</p>";
+//     }
+
+//     // If at front entrance remove input if no key
+//     if (room.name === "Front Entrance" && currentItem.length < 1) {
+//         directions = [, "south", "east", "west"];
+//     } else {
+//         ["north", "south", "east", "west"];
+//     }
+
+//     // If escaped, else if died, else display normal room description
+//     if (room.name === "Exit Room" && currentItem.length > 0) {
+//         textContent = "<p>" + "YOU ESCAPED!" + "</p>";
+//         typewriterEffect(textContent);
+
+//         document.getElementById("playbutton").classList.remove("hidden");
+//         document.getElementById("usertext").classList.add("hidden");
+//     } else if (room.name === "Living Room") {
+//         textContent = "<p>" + occupantMsg + "YOU DIED!" + "</p>";
+//         typewriterEffect(textContent);
+
+//         document.getElementById("playbutton").classList.remove("hidden");
+//         document.getElementById("usertext").classList.add("hidden");
+//     } else {
+//         textContent = "<p>" + room.describe() + "</p>" + occupantMsg + "<p>" + room.getDetails() + "</p>";
+//         typewriterEffect(textContent);
+//         document.getElementById("usertext").focus();
+//     }
+// }
+
+function displayRoomInfo(room) {
+    let directions = ["north", "south", "east", "west"];
 
     // Set room Image and title
     let image = document.getElementById("roomimg");
@@ -268,9 +318,7 @@ function displayRoomInfo(room) {
 
     // If at front entrance remove input if no key
     if (room.name === "Front Entrance" && currentItem.length < 1) {
-        directions = [, "south", "east", "west"];
-    } else {
-        ["north", "south", "east", "west"];
+        directions = directions.filter(direction => direction !== "north");
     }
 
     // If escaped, else if died, else display normal room description
@@ -291,20 +339,42 @@ function displayRoomInfo(room) {
         typewriterEffect(textContent);
         document.getElementById("usertext").focus();
     }
+
+    // Use the updated directions array for command validation
+    input(directions);
 }
 
-function input() {
+// function input() {
+//     document.getElementById("usertext").addEventListener("keydown", function (event) {
+//         if (event.key === "Enter") {
+//             command = document.getElementById("usertext").value;
+
+//             console.log(`Directions before command goes through ${directions}`)
+            
+//             if (directions.includes(command.toLowerCase())) {
+//                 currentRoom = currentRoom.move(command);
+//                 document.getElementById("usertext").value = "";
+//                 displayRoomInfo(currentRoom);
+//             } else {
+//                 console.log(`Directions when there is an error ${directions}`)
+//                 document.getElementById("usertext").value = "";
+//                 alert("that is not a valid command please try again");
+//             }
+//         }
+//     });
+// }
+
+
+function input(directions) {
+    console.log(directions)
     document.getElementById("usertext").addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             command = document.getElementById("usertext").value;
-            
+
             if (directions.includes(command.toLowerCase())) {
                 currentRoom = currentRoom.move(command);
                 document.getElementById("usertext").value = "";
                 displayRoomInfo(currentRoom);
-            } else {
-                document.getElementById("usertext").value = "";
-                alert("that is not a valid command please try again");
             }
         }
     });
@@ -319,7 +389,7 @@ function startGame() {
     document.getElementById("usertext").classList.remove("hidden");
     document.getElementById("playbutton").addEventListener("click", startGame);
 
-    input();
+    input(directions);
 }
 
 startGame();
