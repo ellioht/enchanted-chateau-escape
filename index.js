@@ -1,11 +1,12 @@
 // Class declarations
 class Room {
-    constructor(name,img) {
+    constructor(name, img) {
         this._name = name;
         this._roomImage = img;
         this._description = "";
         this._linkedRooms = {};
         this._character = "";
+        this._inventory = [];
     }
 
     get name() {
@@ -22,6 +23,10 @@ class Room {
 
     get character() {
         return this._character;
+    }
+
+    get inventory() {
+        return this._inventory;
     }
 
     set name(value) {
@@ -45,7 +50,7 @@ class Room {
     }
 
     describe() {
-        return "Looking around the " + this._name + " you can see " + this._description;
+        return "As you look around the " + this._name + " you can see " + this._description;
     }
 
     linkRoom(direction, roomToLink) {
@@ -124,7 +129,7 @@ class Character {
 
 class Item {
     constructor(name) {
-        (this._name = name), (this._description = "");
+        (this._name = name), (this._description = ""), (this._img = "");
     }
 
     set name(value) {
@@ -143,12 +148,24 @@ class Item {
         this._name = value;
     }
 
+    set img(value) {
+        this._img = value;
+    }
+
     get name() {
         return this._name;
     }
 
     get description() {
         return this._description;
+    }
+
+    get img() {
+        return this._img;
+    }
+
+    img() {
+        return this._img;
     }
 
     describe() {
@@ -159,17 +176,34 @@ class Item {
 // Creating Rooms
 const DimlyLitRoom = new Room("Dimly Lit Room", "dimroom.jpg");
 DimlyLitRoom.description =
-    "A large storage room on the top floor with a single lightbulb struggling to light the entire room";
+    "two tall windows shining light into the room. You have no idea how you got here... You must find a way to escape!";
 
 const UpstairsHall = new Room("Upstairs Hall", "upstairshall.jpg");
-UpstairsHall.description = "A long thin hall with a window at the end";
+UpstairsHall.description = "a long narrow corridor. There must be a staircase around here...";
 
 const MasterBedRoom = new Room("Master Bed Room", "masterbedroom.jpg");
 MasterBedRoom.description =
-    "The largest bedroom in the building with a large bed covered in silk sheets and an old fireplace";
+    "a large bed and dresser. You find an old rusty key. What could this be for?...";
 
 const GrandStaircase = new Room("Grand Staircase", "grandstaircase.jpg");
-GrandStaircase.description = "A grand staircase that leads to the main foyer of the bulding";
+GrandStaircase.description = "down to the main foyer. Time to find a way out of here.";
+
+const LivingRoom = new Room("Living Room", "enchantedchateau.jpg");
+LivingRoom.description = "A GHOST!!!";
+
+const FrontEntrance = new Room("Front Entrance", "frontentrance.jpg");
+FrontEntrance.description = "a huge door leading out of this place. Let's open it.";
+
+// End room
+const ExitRoom = new Room("Exit Room", "enchantedchateau.jpg");
+ExitRoom.description = "Exit";
+
+// Creating Items
+const DoorKey = new Item("Door Key");
+DoorKey.description = "a rusty looking key for a door";
+DoorKey.img = "key.jpg";
+
+let currentItem = [];
 
 // Linking Rooms
 DimlyLitRoom.linkRoom("north", UpstairsHall);
@@ -181,16 +215,50 @@ UpstairsHall.linkRoom("south", DimlyLitRoom);
 MasterBedRoom.linkRoom("west", UpstairsHall);
 
 GrandStaircase.linkRoom("east", UpstairsHall);
+GrandStaircase.linkRoom("west", LivingRoom);
+GrandStaircase.linkRoom("north", FrontEntrance);
 
+FrontEntrance.linkRoom("south", GrandStaircase);
+FrontEntrance.linkRoom("north", ExitRoom);
+
+
+const Ghost = new Character("Ghost");
+Ghost.description = "a scary Ghost";
+Ghost.description = "i am a ghost";
+LivingRoom.character = Ghost;
+
+let directions = ["north", "south", "east", "west"];
+
+
+
+function displayInventory(item) {
+    let inventorySlot = document.getElementById("inv1");
+
+    // Only check the array when it has something in it or error
+    if (item.length > 0) {
+        inventorySlot.src = item[0].img;
+    } else {
+        inventorySlot.src = "";
+    }
+}
 
 function displayRoomInfo(room) {
-    // Set room Image
-    let image = document.getElementById("roomimg")
-    image.src = room.roomImage;
 
-    let label = document.getElementById("imglabel")
+    directions = ["north", "south", "east", "west"];
+
+    // Set room Image and title
+    let image = document.getElementById("roomimg");
+    image.src = room.roomImage;
+    let label = document.getElementById("imglabel");
     label.innerHTML = "<p>" + room.name + "</p>";
 
+    // If in master bedroom pickup key and set inventory
+    if (room.name === "Master Bed Room") {
+        currentItem.push(DoorKey);
+    }
+    displayInventory(currentItem);
+
+    // If character in room display character message
     let occupantMsg = "";
     if (room.character === "") {
         occupantMsg = "";
@@ -198,20 +266,38 @@ function displayRoomInfo(room) {
         occupantMsg = "<p>" + room.character.describe() + ". " + room.character.converse() + "</p>";
     }
 
-    textContent = "<p>" + room.describe() + "</p>" + occupantMsg + "<p>" + room.getDetails() + "</p>";
+    // If at front entrance remove input if no key
+    if (room.name === "Front Entrance" && currentItem.length < 1) {
+        directions = [, "south", "east", "west"];
+    } else {
+        ["north", "south", "east", "west"];
+    }
 
-    typewriterEffect(textContent);
-    document.getElementById("usertext").focus();
+    // If escaped, else if died, else display normal room description
+    if (room.name === "Exit Room" && currentItem.length > 0) {
+        textContent = "<p>" + "YOU ESCAPED!" + "</p>";
+        typewriterEffect(textContent);
+
+        document.getElementById("playbutton").classList.remove("hidden");
+        document.getElementById("usertext").classList.add("hidden");
+    } else if (room.name === "Living Room") {
+        textContent = "<p>" + occupantMsg + "YOU DIED!" + "</p>";
+        typewriterEffect(textContent);
+
+        document.getElementById("playbutton").classList.remove("hidden");
+        document.getElementById("usertext").classList.add("hidden");
+    } else {
+        textContent = "<p>" + room.describe() + "</p>" + occupantMsg + "<p>" + room.getDetails() + "</p>";
+        typewriterEffect(textContent);
+        document.getElementById("usertext").focus();
+    }
 }
 
-function startGame() {
-    currentRoom = DimlyLitRoom;
-    displayRoomInfo(currentRoom);
-
-    document.addEventListener("keydown", function (event) {
+function input() {
+    document.getElementById("usertext").addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             command = document.getElementById("usertext").value;
-            const directions = ["north", "south", "east", "west"];
+            
             if (directions.includes(command.toLowerCase())) {
                 currentRoom = currentRoom.move(command);
                 document.getElementById("usertext").value = "";
@@ -222,6 +308,18 @@ function startGame() {
             }
         }
     });
+}
+
+function startGame() {
+    currentItem = [];
+    currentRoom = DimlyLitRoom;
+    displayRoomInfo(currentRoom);
+
+    document.getElementById("playbutton").classList.add("hidden");
+    document.getElementById("usertext").classList.remove("hidden");
+    document.getElementById("playbutton").addEventListener("click", startGame);
+
+    input();
 }
 
 startGame();

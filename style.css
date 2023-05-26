@@ -1,6 +1,7 @@
 :root {
     --shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
         rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    --glow: 0px 0px 30px 10px rgba(133, 241, 255, 0.637);
 }
 * {
     box-sizing: border-box;
@@ -18,9 +19,16 @@ body {
     flex-direction: column;
     gap: 20px;
 }
+.inv {
+    position: absolute;
+    top: 70px;
+    width: 50px;
+    border-radius: 10px;
+    box-shadow: var(--glow);
+}
 #imglabel {
-    position: relative;
-    top: 90px;
+    position: absolute;
+    top: 30px;
     background-color: rgba(2, 2, 2, .4);
     color: antiquewhite;
     font-weight: 600;
@@ -41,19 +49,8 @@ body {
 }
 #gamearena {
     width: 90%;
-    /* padding: 10px; */
-    /* background-color: rgb(36, 189, 87); */
-}
-#details {
-    /* padding: 10px; */
-    /* background-color: rgb(26, 44, 145); */
-}
-#alltext {
-    /* padding: 10px; */
-    /* background-color: rgb(205, 209, 141); */#
 }
 #textarea {
-    /* text-align: left; */
     color: antiquewhite;
     font-weight: 600;
     font-size: 20px;
@@ -62,11 +59,36 @@ body {
     justify-content: center;
     flex-direction: column;
     padding: 10px;
-    /* background-color: rgb(191, 69, 207); */
 }
 #textarea p {
     margin: 10px 0;
 }
 #usertext {
     position: relative;
+    border: none;
+    background-color: antiquewhite;
+    border-radius: 10px;
+    padding: 10px;
+}
+.input-elements {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.hidden {
+    display: none;
+}
+.instructions {
+    color:antiquewhite;
+    font-weight: 400;
+    font-size: 20px;
+    padding: 8px;
+}
+#playbutton {
+    border: none;
+    background-color: white;
+    border-radius: 10px;
+    padding: 4px 20px;
+    margin: 20px;
+    font-weight: bold;
 }
